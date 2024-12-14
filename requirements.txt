@@ -1,3 +1,4 @@
 fastapi[all]
 psycopg2
 sqlalchemy
+passlib[bcrypt]
