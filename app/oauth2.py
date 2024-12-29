@@ -4,13 +4,14 @@ from datetime import datetime, timedelta, timezone
 import jwt
 from sqlalchemy.orm import Session
 from . import schemas, database, models
+from .config import settings
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 # openssl rand -hex 32
-SECRET_KEY = "d7af774858d64f46ddd02d1184b1f44d8d7793f94a79344094b0022c13d1fd07"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 60
+SECRET_KEY = f"{settings.SECRET_KEY}"
+ALGORITHM = f"{settings.ALGORITHM}"
+ACCESS_TOKEN_EXPIRE_MINUTES = settings.ACCESS_TOKEN_EXPIRE_MINUTES
 
 
 def create_access_token(data: dict):
@@ -42,7 +43,7 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
         detail=f"Could not authenticate user",
         headers={"WWW-Authenticate": "Bearer"},
     )
-    
+
     token = verify_access_token(token, credentials_exception)
     user = db.query(models.User).filter(models.User.id == token.id).first()
     return user
