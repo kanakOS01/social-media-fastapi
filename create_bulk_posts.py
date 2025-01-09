@@ -132,9 +132,7 @@ trial_posts = [
 
 api_url = "http://localhost:8000/posts/"
 jwt_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo3LCJleHAiOjE3MzQ2OTExMjB9.7F9hZAUbL7bGgvMkx6pLkGXd5bIP2mS_QZgmkukglXA"
-headers = {
-        "Authorization": f"Bearer {jwt_token}"
-}
+headers = {"Authorization": f"Bearer {jwt_token}"}
 
 
 def publish_posts(posts, api_url):
@@ -143,9 +141,7 @@ def publish_posts(posts, api_url):
         if response.status_code == 201:
             print(f"Post '{post['title']}' created successfully.")
         else:
-            print(
-                f"Failed to create post '{post['title']}': {response.status_code}, {response.text}"
-            )
+            print(f"Failed to create post '{post['title']}': {response.status_code}, {response.text}")
 
 
 publish_posts(trial_posts, api_url)
