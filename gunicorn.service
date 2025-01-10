@@ -1,0 +1,13 @@
+[Unit]
+Description=social media fastapi server api
+After=network.target
+
+[Service]
+User=kanak
+Group=kanak
+WorkingDirectory=/home/kanak/social-media-fastapi/src
+Environment="PATH=/home/kanak/social-media-fastapi/fastapi-venv/bin"
+ExecStart=/home/kanak/.pyenv/shims/gunicorn -w 4 -k uvicorn.workers.UvicornWorker app.main:app -b 0.0.0.0:8000
+
+[Install]
+WantedBy=multi-user.target
