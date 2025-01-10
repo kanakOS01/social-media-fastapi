@@ -2,6 +2,8 @@
 
 This is a FastAPI-based social media API that includes basic CRUD operations, user authentication, schema validation, and database migrations using Alembic. It is designed for users to interact with posts, comments, and profiles.
 
+> Deployed on [DigitalOcean](http://134.209.159.122:8000/docs)
+
 ## Features
 
 - User authentication (login/signup)
