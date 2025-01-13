@@ -1,6 +1,8 @@
                                                                                                         # Social Media API with FastAPI
 
-This is a FastAPI-based social media API that includes basic CRUD operations, user authentication, and database migrations using Alembic. It is designed for users to interact with posts, comments, and profiles.
+This is a FastAPI-based social media API that includes basic CRUD operations, user authentication, schema validation, and database migrations using Alembic. It is designed for users to interact with posts, comments, and profiles.
+
+> Deployed on [DigitalOcean](http://134.209.159.122:8000/docs)
 
 ## Features
 
@@ -11,21 +13,19 @@ This is a FastAPI-based social media API that includes basic CRUD operations, us
 
 ## Prerequisites
 
-- Python 3.7+
-- PostgreSQL (or any supported database)
+- Python 3.8+
+- PostgreSQL
 
 ## Setup Instructions
 
 ### 1. Clone the Repository
 
 ```bash
-git clone <your-repository-url>
-cd social-media-api
+git clone https://github.com/kanakOS01/social-media-fastapi.git
+cd social-media-fastapi
 ```
 
 ### 2. Set Up a Virtual Environment
-
-Create a virtual environment using `venv`:
 
 ```bash
 python3 -m venv venv
@@ -33,17 +33,9 @@ python3 -m venv venv
 
 Activate the virtual environment:
 
-- For **Linux/macOS**:
-
-  ```bash
-  source venv/bin/activate
-  ```
-
-- For **Windows**:
-
-  ```bash
-  venv\Scripts\activate
-  ```
+```bash
+source venv/bin/activate
+```
 
 ### 3. Install Dependencies
 
@@ -55,30 +47,23 @@ pip install -r requirements.txt
 
 ### 4. Database Configuration
 
-Update your database connection settings in the `.env` file or the `config.py` file. Make sure you have the required database set up (PostgreSQL, for instance) and the correct credentials.
-
-Example `.env`:
-
-```env
-DATABASE_URL=postgresql://username:password@localhost/dbname
-SECRET_KEY=your_secret_key
+Update your database connection settings in the `.env` file.
+Create secret key using `openssl rand -hex 32`
+```
+DB_HOSTNAME=
+DB_PORT=
+DB_PASSWORD=
+DB_USERNAME=
+DB_NAME=
+SECRET_KEY=
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=
 ```
 
 ### 5. Database Migrations with Alembic
 
-Initialize Alembic and create the migration scripts:
-
-```bash
-alembic init alembic
-```
-
-This will set up the Alembic folder structure. Now, create a migration script by running:
-
-```bash
-alembic revision --autogenerate -m "Initial migration"
-```
-
-Apply the migrations to the database:
+Create a database.
+Apply latest alembic revision.
 
 ```bash
 alembic upgrade head
@@ -89,7 +74,7 @@ alembic upgrade head
 You can run the FastAPI application with the following command:
 
 ```bash
-uvicorn main:app --reload
+fastapi dev --app app
 ```
 
 The API will be available at `http://localhost:8000`.
@@ -105,92 +90,19 @@ The FastAPI app automatically generates interactive API documentation using Swag
 
 ```
 .
-├── alembic/
-├── app/
-│   ├── api/
-│   │   ├── endpoints/
-│   │   └── dependencies.py
-│   ├── core/
-│   │   ├── config.py
-│   │   ├── security.py
-│   └── models/
-│   │   ├── user.py
-│   │   ├── post.py
-│   │   └── comment.py
-│   ├── main.py
-│   └── db.py
+├── alembic
 ├── alembic.ini
+├── app
+│   ├── routers
+│   ├── __init__.py
+│   ├── config.py
+│   ├── database.py
+│   ├── main.py
+│   ├── models.py
+│   ├── oauth2.py
+│   ├── schemas.py
+│   └── utils.py
+├── README.md
 ├── requirements.txt
 └── .env
 ```
-
-## Example API Endpoints
-
-### User Registration
-
-**POST** `/users/register`
-
-Request body:
-
-```json
-{
-  "username": "john_doe",
-  "email": "john@example.com",
-  "password": "password123"
-}
-```
-
-### User Login
-
-**POST** `/users/login`
-
-Request body:
-
-```json
-{
-  "username": "john_doe",
-  "password": "password123"
-}
-```
-
-### Create Post
-
-**POST** `/posts/`
-
-Request body:
-
-```json
-{
-  "title": "My First Post",
-  "content": "This is my first post on the platform!"
-}
-```
-
-### Get All Posts
-
-**GET** `/posts/`
-
-### Create Comment
-
-**POST** `/comments/`
-
-Request body:
-
-```json
-{
-  "post_id": 1,
-  "content": "Great post!"
-}
-```
-
-## Testing
-
-You can run tests using `pytest`. Make sure to set up a test database in your `.env.test` file if necessary.
-
-```bash
-pytest
-```
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

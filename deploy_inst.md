@@ -1,87 +1,176 @@
-1. create DO droplet and ssh into the vm using
-`ssh root@<ip-addr>`
+# Setup Instructions for FastAPI Application on DigitalOcean
 
-2. installs and checks
-- `sudo apt update && sudo apt upgrade -y`
-- check python installation
-- check pip installation
-	`sudo apt install python3-pip`
-- install postgres
-	`sudo apt install postgresql postgresql-contrib`
-	`psql version`
+## 1. Create a DigitalOcean Droplet and SSH into the VM
 
-3. postgres setup
-- use postgres user 
-	`su - postgres`
-- open psql shell
-	`psql -U postgres`
-- add password
-	`\password postgres`
-- update postgres files
-	`cd /etc/postgresql/14/main`
-	- `sudo nano postgresql.conf`
-		go to CONNECTIONS AND AUTHENTICATION and add this line to access db with pgadmin remotely
-		this is not the most secure 
-		`listen_addresses = '*'
+```bash
+ssh root@<ip-addr>
+```
 
-	- `sudo nano pg_hba.conf`
-		change db access method from peer to md5
-		change addresses to all addresses (0.0.0.0 and ::/0) for local and host type
-	- restart using `systemctl restart postgresql`
-	- now you can connect to psql without changing user to postgres and use a password and check the data remotely
+## 2. Installations and Checks
 
-4. create another user
-`adduser <username>`
+- Update and upgrade the system:
+  ```bash
+  sudo apt update && sudo apt upgrade -y
+  ```
+- Check Python installation.
+- Check pip installation:
+  ```bash
+  sudo apt install python3-pip
+  ```
+- Install PostgreSQL:
+  ```bash
+  sudo apt install postgresql postgresql-contrib
+  psql --version
+  ```
 
-5. login as another user
-`ssh <user>@<ip-addr>`
+## 3. PostgreSQL Setup
 
-6. give <user> root access
-run `usermod -aG sudo <user>` as root and re login
+- Switch to the PostgreSQL user:
+  ```bash
+  su - postgres
+  ```
+- Open the PostgreSQL shell:
+  ```bash
+  psql -U postgres
+  ```
+- Set the PostgreSQL password:
+  ```sql
+  \password postgres
+  ```
+- Update PostgreSQL configuration files:
+  ```bash
+  cd /etc/postgresql/14/main
+  sudo nano postgresql.conf
+  ```
+  - Under **CONNECTIONS AND AUTHENTICATION**, add:
+    ```
+    listen_addresses = '*'
+    ```
+  - Edit `pg_hba.conf` to:
+    - Change authentication method to `md5`.
+    - Allow all addresses (`0.0.0.0` and `::/0`) for local and host types.
+  - Restart PostgreSQL:
+    ```bash
+    systemctl restart postgresql
+    ```
 
-7. setup project
- a. create a folder (app) and cd
- b. create a venv and a folder (src)
- c. `git clone https://github.com/kanakOS01/social-media-fastapi.git src`
+## 4. Create Another User
 
-8. setup .env
- a. create a `.env` in `~`
- b. add env var in the file
- c. run `set -o allexport; source /home/kanak/.env; set +o allexport`
- > these do not persist throught reboot so add the command to `.profile`
+```bash
+adduser <username>
+```
 
-9. initiate database and tables
- a. create the database
- b. run `alembic upgrade head`
+## 5. Login as the New User
 
-10. run the server
- a. `fastapi run --app app`
-	not the best method, user gunicorn with workers and persisting server
- b. using gunicorn
-	`gunicorn -w 4 -k uvicorn.workers.UvicornWorker app.main:app -b 0.0.0.0:8000`
-	gunicorn, 4 workeres, loc of app - app.main:app, bind to 0.0.0.0:8000
- c. create a service
-	`cd /etc/systemd/system`
-	create api.service
-	copy gunicorn.service in this file
- d. run the service
-	`systemctl start api.service`
-	`systemctl status api.service`
-	there will be an error due to env variable as var loaded from .profile can't be accessed from service
-	add EnvironmentFile=/home/kanak/.env to api.service file and restart
- e. handle reboot
-	if Loaded:  ... disabled then won't restart on reboot
-	`sudo systemctl enable api`
+```bash
+ssh <user>@<ip-addr>
+```
 
-11. setup nginx
- a. `sudo apt install nginx`
- b. `systemctl start nginx`
- c. `cd /etc/nginx/sites-available`
- d. add content of nginx file
- e. `systemctl restart nginx`
+## 6. Grant Root Access to the New User
 
-12. domain name
- a. update name servers - https://docs.digitalocean.com/products/networking/dns/getting-started/dns-registrars/
- b. https://docs.digitalocean.com/products/networking/dns/how-to/manage-records/
- c. add A record
- d. add CNAME record
+Run the following command as `root`:
+
+```bash
+usermod -aG sudo <user>
+```
+
+Re-login to apply changes.
+
+## 7. Setup the Project
+
+- Create a folder (`app`) and navigate to it.
+- Create a virtual environment and a source folder (`src`).
+- Clone the repository:
+  ```bash
+  git clone https://github.com/kanakOS01/social-media-fastapi.git src
+  ```
+
+## 8. Setup Environment Variables
+
+- Create a `.env` file in the home directory (`~`).
+- Add environment variables to this file.
+- Load the variables:
+  ```bash
+  set -o allexport; source /home/kanak/.env; set +o allexport
+  ```
+  > **Note**: These variables do not persist through reboots. Add the above command to `.profile`.
+
+## 9. Initialize the Database and Tables
+
+- Create the database.
+- Run migrations:
+  ```bash
+  alembic upgrade head
+  ```
+
+## 10. Run the Server
+
+### a. Using FastAPI's Development Server
+
+```bash
+fastapi run --app app
+```
+> **Note**: This is not the best method for production. Use `gunicorn` for better performance.
+
+### b. Using Gunicorn
+
+- Start the server:
+  ```bash
+  gunicorn -w 4 -k uvicorn.workers.UvicornWorker app.main:app -b 0.0.0.0:8000
+  ```
+  - `gunicorn`: Start the server.
+  - `-w 4`: Use 4 workers.
+  - `-k uvicorn.workers.UvicornWorker`: Use Uvicorn worker class.
+  - `-b 0.0.0.0:8000`: Bind to all interfaces on port 8000.
+
+### c. Create a Service for Gunicorn
+
+- Navigate to `/etc/systemd/system`:
+  ```bash
+  cd /etc/systemd/system
+  ```
+- Create `api.service` and add the Gunicorn configuration.
+- Start the service:
+  ```bash
+  systemctl start api.service
+  systemctl status api.service
+  ```
+- If environment variables are not loaded, add:
+  ```
+  EnvironmentFile=/home/kanak/.env
+  ```
+  Restart the service.
+
+### d. Enable the Service to Restart on Reboot
+
+```bash
+sudo systemctl enable api
+```
+
+## 11. Setup Nginx
+
+- Install Nginx:
+  ```bash
+  sudo apt install nginx
+  ```
+- Start the service:
+  ```bash
+  systemctl start nginx
+  ```
+- Navigate to Nginx configuration directory:
+  ```bash
+  cd /etc/nginx/sites-available
+  ```
+- Add the Nginx configuration file.
+- Restart Nginx:
+  ```bash
+  systemctl restart nginx
+  ```
+
+## 12. Configure a Domain Name
+
+- Update name servers: [DigitalOcean Docs](https://docs.digitalocean.com/products/networking/dns/getting-started/dns-registrars/)
+- Manage DNS records: [DigitalOcean Docs](https://docs.digitalocean.com/products/networking/dns/how-to/manage-records/)
+- Add the following DNS records:
+  - **A Record**: Point to your droplet's IP address.
+  - **CNAME Record**: Add your desired subdomain.
