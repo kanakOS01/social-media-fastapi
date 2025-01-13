@@ -1,4 +1,4 @@
-# Social Media API with FastAPI
+                                                                                                        # Social Media API with FastAPI
 
 This is a FastAPI-based social media API that includes basic CRUD operations, user authentication, and database migrations using Alembic. It is designed for users to interact with posts, comments, and profiles.
 
