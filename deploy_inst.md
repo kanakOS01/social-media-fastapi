@@ -174,3 +174,20 @@ sudo systemctl enable api
 - Add the following DNS records:
   - **A Record**: Point to your droplet's IP address.
   - **CNAME Record**: Add your desired subdomain.
+
+## 13. SSL/HTTPS
+- Go to https://certbot.eff.org/
+- Click `Get Certbot instructions`
+- follow instructions
+
+## 14. Restrict ports
+- setup a firewall to restrict what ports are allowed
+- `sudo ufw status`
+- allow http, https, ssh
+  - `sudo ufw allow http`
+  - `sudo ufw allow https`
+  - `sudo ufw allow ssh`
+- allow postgres (if u want to use database remotely)
+  - `sudo ufw allow 5432`
+- `sudo ufw enable`
+- then reboot
