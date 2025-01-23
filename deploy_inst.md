@@ -191,3 +191,12 @@ sudo systemctl enable api
   - `sudo ufw allow 5432`
 - `sudo ufw enable`
 - then reboot
+
+## 15. Docker
+- setup docker locally
+- to build the image from `Dockerfile` run `docker build -t fastapi .`
+- spin container with `docker compose -d`
+  > had to go into api container and run `alembic upgrade head` to create the tables, not sure why 
+- add to docker hub
+  - rename the image - `docker image tag <old name> <new name>
+  - `docker push <new name>
