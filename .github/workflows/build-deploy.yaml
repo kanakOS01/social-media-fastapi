@@ -1,0 +1,10 @@
+name: Build and Deploy Code
+on: [push]
+jobs:
+  job1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pulling Github Repository
+        uses: actions/checkout@v4
+      - name: Test
+        run: Hey there

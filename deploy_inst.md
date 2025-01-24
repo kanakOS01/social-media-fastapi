@@ -200,3 +200,6 @@ sudo systemctl enable api
 - add to docker hub
   - rename the image - `docker image tag <old name> <new name>
   - `docker push <new name>
+
+## 16. CI/CD
+
