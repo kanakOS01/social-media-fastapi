@@ -7,4 +7,4 @@ jobs:
       - name: Pulling Github Repository
         uses: actions/checkout@v4
       - name: Test
-        run: Hey there
+        run: echo "Hey there"
