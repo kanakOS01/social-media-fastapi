@@ -3,7 +3,9 @@ name: Build and Deploy Code
 on: [push]
 
 jobs:
-  job1:
+  Build:
+    runs-on: ubuntu-latest
+
     environment:
       name: testing
 
@@ -30,8 +32,6 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-
-    runs-on: ubuntu-latest
 
     steps:
       - name: Pulling Github Repository
@@ -78,3 +78,12 @@ jobs:
 
       # - name: Image Digest
       #   run: echo ${{ steps.docker_build.outputs.digest }}
+
+  Deploy:
+    runs-on: ubuntu-latest
+
+    needs: [Build]
+
+    steps:
+      - name: Deploying stuff
+        run: echo "Test deployment github action"
