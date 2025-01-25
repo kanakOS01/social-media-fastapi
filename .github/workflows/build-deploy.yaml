@@ -91,7 +91,6 @@ jobs:
           host: ${{ secrets.UBUNTU_PROD_HOST }}
           username: ${{ secrets.UBUNTU_PROD_USERNAME }}
           password: ${{ secrets.UBUNTU_PROD_PASSWORD }}
-          port: ${{ secrets.PORT }}
           script: |
             cd app/src
             git pull
