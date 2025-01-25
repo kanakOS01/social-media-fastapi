@@ -82,15 +82,12 @@ jobs:
   Deploy:
     runs-on: ubuntu-latest
 
+    environment:
+      name: prod
+
     needs: [Build]
 
     steps:
-      - name: Debug Secrets
-        run: |
-          echo "Host: ${{ secrets.UBUNTU_PROD_HOST }}"
-          echo "Username: ${{ secrets.UBUNTU_PROD_USERNAME }}"
-          echo "Port: ${{ secrets.PORT }}"
-          
       - name: Deploy to ubuntu server
         uses: appleboy/ssh-action@v1.2.0
         with:
