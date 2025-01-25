@@ -12,7 +12,7 @@ from app import models
 
 
 # setup use of a test database for testing and override get_db dependency
-SQLALCHEMY_DATABASE_URL = f"postgresql://{settings.DB_USERNAME}:{settings.DB_PASSWORD}@{settings.DB_HOSTNAME}:{settings.DB_PORT}/test_{settings.DB_NAME}"
+SQLALCHEMY_DATABASE_URL = f"postgresql://{settings.DB_USERNAME}:{settings.DB_PASSWORD}@{settings.DB_HOSTNAME}:{settings.DB_PORT}/{settings.DB_NAME}"
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL, echo=False)
 TestingSessionLocal = sessionmaker(autoflush=False, bind=engine)
