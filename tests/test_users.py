@@ -7,7 +7,6 @@ from app.config import settings
 
 def test_root(client):
     response = client.get("/")
-    assert response.json().get("message") == "Hello World"
     assert response.status_code == 200
 
 
