@@ -1,0 +1,21 @@
+# Ignore Python cache files and directories
+__pycache__/
+
+# Ignore virtual environment directories
+venv/
+env/
+fastapi-venv/
+
+# Ignore environment files with sensitive data
+.env
+.env.*
+
+# Ignore Git repository files
+.git/
+.gitignore
+
+# Ignore testing and development tools
+*.pytest_cache/
+
+# Ignore IDE-specific files and directories
+.vscode/
