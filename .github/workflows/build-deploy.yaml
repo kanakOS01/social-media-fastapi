@@ -95,3 +95,9 @@ jobs:
             cd app/src
             git pull
             echo ${{ secrets.UBUNTU_PROD_PASSWORD }} | sudo -S systemctl restart api
+
+      - name: Debug Secrets
+        run: |
+          echo "Host: ${{ secrets.UBUNTU_PROD_HOST }}"
+          echo "Username: ${{ secrets.UBUNTU_PROD_USERNAME }}"
+          echo "Port: ${{ secrets.PORT }}"
