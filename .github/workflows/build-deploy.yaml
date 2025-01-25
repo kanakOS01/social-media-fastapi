@@ -2,6 +2,15 @@ name: Build and Deploy Code
 on: [push]
 jobs:
   job1:
+    env:
+      DB_HOSTNAME: localhost
+      DB_PORT: 5432
+      DB_PASSWORD: test123
+      DB_USERNAME: postgres
+      DB_NAME: test_social-media-db
+      SECRET_KEY: d7af774858d64f46ddd02d1184b1f44d8d7793f94a79344094b0022c13d1fd07
+      ALGORITHM: HS256
+      ACCESS_TOKEN_EXPIRE_MINUTES: 60
     runs-on: ubuntu-latest
     steps:
       - name: Pulling Github Repository
