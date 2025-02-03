@@ -2,7 +2,7 @@
 
 This is a FastAPI-based social media API that includes basic CRUD operations, user authentication, schema validation, and database migrations using Alembic. It is designed for users to interact with posts, comments, and profiles.
 
-> Deployed on kanaktanwar.tech/docs with a DigitalOcean ubuntu server
+> Deployed on kanaktanwar.tech:8000/docs with a DigitalOcean ubuntu server
 
 ## Features
 
